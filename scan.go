@@ -100,20 +100,12 @@ func scanFile(path string, ro ReadOptions, fn func(Event) error) error {
 	}
 }
 
-func seqScanPaths(path string) []string {
-	archived := path + ".1"
-	if _, err := os.Stat(archived); err == nil {
-		return []string{path, archived}
-	}
-	return []string{path}
-}
-
 func maxSeq(path string, ro ReadOptions) (int64, error) {
 	var hi int64
-	for _, p := range seqScanPaths(path) {
-		err := scanFile(p, ro, func(ev Event) error {
-			if ev.Seq > hi {
-				hi = ev.Seq
+	for _, p := range ro.rotator().ScanPaths(path) {
+		err := scanFileRaw(p, ro, func(_ []byte, seq int64) error {
+			if seq > hi {
+				hi = seq
 			}
 			return nil
 		})

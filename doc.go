@@ -1,9 +1,9 @@
 // Package jsonlreplay is an append-only JSONL log with monotonic sequence numbers and replay cursors.
 //
-// Write path: Open, Append, AppendText, AppendData, Close.
-// Read path: MaxSeq, NextSeq, Replay, OpenReplayIter, Poll, ReadAll.
+// Write path: Open, Append, AppendJSON, AppendAs, AppendText, AppendData, Close.
+// Read path: MaxSeq, NextSeq, Replay, ReplayRaw, OpenReplayIter, OpenRawIter, Poll, ReadAll.
 //
-// Each line is one JSON object (seq, optional time, kind, text, data) for use with jq, rg, or editors.
+// Each line is one JSON object. The default Event shape uses seq, time, kind, text, and data.
+// Use AppendJSON / ReplayRaw for your own schema, or AppendAs with a custom Codec.
 // Durability is controlled by Options.Durability (write, flush, or fsync per append).
-// Set Options.CreateDir to create parent directories before open.
 package jsonlreplay

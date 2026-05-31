@@ -25,6 +25,8 @@ linters:
     - unused
   settings:
     gocritic:
+      disabled-checks:
+        - hugeParam
       enabled-tags:
         - diagnostic
         - performance

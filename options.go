@@ -52,6 +52,10 @@ type Options struct {
 	FileMode uint32
 	// CreateDir creates parent directories with 0o755 before opening the log.
 	CreateDir bool
+	// Codec marshals custom types for AppendAs (nil uses EventCodec).
+	Codec Codec
+	// Rotator archives segments when MaxFileBytes is set (nil uses SingleRotator → path+".1").
+	Rotator Rotator
 }
 
 func (o Options) maxLineBytes() int {
@@ -81,6 +85,8 @@ type ReadOptions struct {
 	MaxLineBytes int
 	// CorruptLines selects skip vs error on invalid lines.
 	CorruptLines CorruptLinePolicy
+	// Rotator selects archive segments for MaxSeq (nil uses SingleRotator).
+	Rotator Rotator
 }
 
 func (o ReadOptions) maxLineBytes() int {
