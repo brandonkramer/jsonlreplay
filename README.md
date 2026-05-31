@@ -12,22 +12,6 @@ From [pkg.go.dev](https://pkg.go.dev/github.com/brandonkramer/jsonlreplay):
 go get github.com/brandonkramer/jsonlreplay
 ```
 
-## Development
-
-Install git hooks once in the repo:
-
-```bash
-lefthook install
-```
-
-Hooks run `golangci-lint` on commit (staged `.go` files) and `./scripts/check.sh` on push (tests, examples build, lint). CI runs the same checks on pull requests.
-
-```bash
-make check
-make test
-make lint
-```
-
 ## Quick start
 
 ```go
@@ -99,3 +83,19 @@ batch, highSeq, err := jsonlreplay.Poll(ctx, w.Path(), hi, 2*time.Second, 50, js
 - Cross-process file locking (single `Writer` per path in one process)
 - Cross-process tailing of a live log
 - Compaction or indexing beyond single-file rotation
+
+## Development
+
+Install git hooks once in the repo:
+
+```bash
+lefthook install
+```
+
+Hooks run `golangci-lint` on commit (staged `.go` files) and `./scripts/check.sh` on push (tests, examples build, lint). CI runs the same checks on pull requests.
+
+```bash
+make check
+make test
+make lint
+```
