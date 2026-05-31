@@ -1,0 +1,11 @@
+# https://github.com/evilmartians/lefthook
+pre-commit:
+  commands:
+    golangci-lint:
+      glob: "**/*.go"
+      run: ./scripts/lint.sh {staged_files}
+
+pre-push:
+  commands:
+    check:
+      run: ./scripts/check.sh

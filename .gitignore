@@ -1,0 +1,60 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+# Code coverage and profiling
+*.out
+*.cover
+*.coverprofile
+coverage.html
+coverage.txt
+*.prof
+*.pprof
+
+# Local scratch and example output
+/tmp/
+events.jsonl
+events.jsonl.1
+*.jsonl
+*.jsonl.1
+
+# Build output
+/bin/
+/dist/
+
+# Delve debugger
+__debug_bin
+__debug_bin.exe
+
+# Go workspace (local multi-module checkouts)
+go.work
+go.work.sum
+
+# Dependency vendoring
+/vendor/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Editor and IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# Lefthook local overrides (optional per-machine config)
+lefthook-local.yml
+lefthook-local.yaml
