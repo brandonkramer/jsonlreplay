@@ -19,4 +19,4 @@ check:
 	./scripts/check.sh
 
 install-hooks:
-	lefthook install
+	go tool lefthook install

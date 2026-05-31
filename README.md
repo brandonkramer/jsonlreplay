@@ -86,13 +86,13 @@ batch, highSeq, err := jsonlreplay.Poll(ctx, w.Path(), hi, 2*time.Second, 50, js
 
 ## Development
 
-Install git hooks once in the repo:
+Lefthook and golangci-lint are pinned in `go.mod` as **tools** (dev-only; not library dependencies). Install git hooks once per clone:
 
 ```bash
-lefthook install
+make install-hooks
 ```
 
-Hooks run `golangci-lint` on commit (staged `.go` files) and `./scripts/check.sh` on push (tests, examples build, lint). CI runs the same checks on pull requests.
+That runs `go tool lefthook install`. Hooks and `make lint` use `go tool golangci-lint` from the same `go.mod` pins. CI runs `./scripts/check.sh` (no lefthook required).
 
 ```bash
 make check

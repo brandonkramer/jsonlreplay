@@ -36,7 +36,7 @@ func Poll(
 			return nil, 0, fmt.Errorf("poll max seq: %w", err)
 		}
 		if hi > sinceSeq || time.Now().After(deadline) {
-			events, err = Replay(path, sinceSeq, limit, ro)
+			events, err = replayPoll(path, sinceSeq, limit, ro)
 			if err != nil {
 				return nil, 0, fmt.Errorf("poll replay: %w", err)
 			}
@@ -53,7 +53,7 @@ func Poll(
 }
 
 func pollReplay(ctx context.Context, path string, sinceSeq int64, limit int, ro ReadOptions, hi int64) ([]Event, int64, error) {
-	events, err := Replay(path, sinceSeq, limit, ro)
+	events, err := replayPoll(path, sinceSeq, limit, ro)
 	if err != nil {
 		return nil, 0, fmt.Errorf("poll replay: %w", err)
 	}

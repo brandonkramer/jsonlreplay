@@ -41,7 +41,7 @@ func Open(path string, opts Options) (*Writer, error) {
 	if err != nil {
 		return nil, fmt.Errorf("resume seq: %w", err)
 	}
-	f, err := os.OpenFile(path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, os.FileMode(opts.fileMode()))
+	f, err := logOpenFile(path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, os.FileMode(opts.fileMode()))
 	if err != nil {
 		return nil, fmt.Errorf("open log %s: %w", path, err)
 	}
@@ -73,7 +73,7 @@ func (w *Writer) Append(ev Event) (Event, error) {
 		ev.Time = FormatTime(w.opts.clock()())
 	}
 
-	line, err := json.Marshal(ev)
+	line, err := eventJSONMarshal(ev)
 	if err != nil {
 		return Event{}, fmt.Errorf("marshal event: %w", err)
 	}
@@ -84,7 +84,7 @@ func (w *Writer) Append(ev Event) (Event, error) {
 	if err := w.rotateIfNeeded(lineLen); err != nil {
 		return Event{}, err
 	}
-	if _, err := w.f.Write(append(line, '\n')); err != nil {
+	if _, err := logFileWrite(w.f, append(line, '\n')); err != nil {
 		return Event{}, fmt.Errorf("append log %s: %w", w.path, err)
 	}
 	if err := w.sync(); err != nil {
@@ -114,7 +114,7 @@ func (w *Writer) Close() error {
 	if w.f == nil {
 		return nil
 	}
-	err := w.f.Close()
+	err := logFileClose(w.f)
 	w.f = nil
 	if err != nil {
 		return fmt.Errorf("close log %s: %w", w.path, err)
@@ -127,10 +127,10 @@ func (w *Writer) rotateIfNeeded(lineLen int) error {
 	if err != nil || !rotated {
 		return err
 	}
-	if err := w.f.Close(); err != nil {
+	if err := logFileClose(w.f); err != nil {
 		return fmt.Errorf("close log %s: %w", w.path, err)
 	}
-	f, err := os.OpenFile(w.path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, os.FileMode(w.opts.fileMode()))
+	f, err := logOpenFile(w.path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, os.FileMode(w.opts.fileMode()))
 	if err != nil {
 		return fmt.Errorf("reopen log %s: %w", w.path, err)
 	}
@@ -141,7 +141,7 @@ func (w *Writer) rotateIfNeeded(lineLen int) error {
 func (w *Writer) sync() error {
 	switch w.opts.Durability {
 	case DurabilityFlush, DurabilityFsync:
-		if err := w.f.Sync(); err != nil {
+		if err := logFileSync(w.f); err != nil {
 			return fmt.Errorf("sync log %s: %w", w.path, err)
 		}
 		return nil
