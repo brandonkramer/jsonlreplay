@@ -9,7 +9,7 @@ Each line is one JSON object (`seq`, optional `time`, `kind`, `text`, `data`) so
 From [pkg.go.dev](https://pkg.go.dev/github.com/brandonkramer/jsonlreplay):
 
 ```bash
-go get github.com/brandonkramer/jsonlreplay
+go get github.com/brandonkramer/jsonlreplay@v0.1.0
 ```
 
 ## Quick start
